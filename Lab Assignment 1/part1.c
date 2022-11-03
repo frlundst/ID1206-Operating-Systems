@@ -1,11 +1,5 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h> 
-#include <fcntl.h> 
-#include <errno.h> 
-#include <sys/wait.h>
 
 int main(){
         int pipefds[2];
