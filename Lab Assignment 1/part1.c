@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +20,6 @@ int main(int argc, char *argv[])
         break;
 
     default: // parent
-        wait(NULL);
         dup2(fd[0], 0);
         close(fd[1]);
         execlp("wc", "wc", "-l", NULL);
