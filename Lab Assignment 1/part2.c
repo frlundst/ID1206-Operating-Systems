@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     }
     else
     { // parent
-        (void)waitpid(id, NULL, 0);
+        wait(NULL);
         char rcv_message[500];
         msgrcv(msgid, &rcv_message, 500, 0, 0);
 
