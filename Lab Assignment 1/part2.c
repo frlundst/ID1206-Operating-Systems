@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
     key_t key;
-    int msgflg;
+    int msgflg = IPC_CREAT | 0660;
     int msgid = msgget(key, msgflg);
 
     if (msgid == -1)
@@ -35,18 +35,19 @@ int main(int argc, char *argv[])
         }
 
         // Testar printa ut fil, lägg till i parent istället
-        char ch;
+        /*char ch;
         do
         {
             ch = fgetc(file);
             printf("%c", ch);
-        } while (ch != EOF);
+        } while (ch != EOF);*/
 
         // Send file through message queue
         msgsnd(key, &file, 500, msgflg);
     }
     else
     { // parent
+        wait(NULL);
     }
 
     return 0;
