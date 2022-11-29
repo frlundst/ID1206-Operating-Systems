@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define PAGE_ENTRIES 256
 
 
 int get_page_number(int logical_address){
@@ -9,6 +10,8 @@ int get_page_number(int logical_address){
 int get_page_offset(int logical_address){
     return (0x00FF & logical_address);
 }
+
+int page_table[PAGE_ENTRIES];
 
 int main(int argc, char* argv[]){
 
