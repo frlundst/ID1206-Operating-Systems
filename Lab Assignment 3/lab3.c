@@ -23,9 +23,9 @@ int main(int argc, char* argv[]){
 
     int logical_address = atoi(value);
 
-    printf("logical address %d \n", logical_address);
-    printf("page_number : %x \n", get_page_number(logical_address));
-    printf("page_offset : %x \n", get_page_offset(logical_address));
+    printf("logical address %d ", logical_address);
+    printf(" page_number : %x ", get_page_number(logical_address));
+    printf(" page_offset : %x \n", get_page_offset(logical_address));
 
     return 0;
 }
