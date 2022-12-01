@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
                 page_table[i] = page_number;
                 frame = i;
             }
-            tlb[queue_position %= (size_of(tlb) / size_of(tlb[0])) - 1][0] = page_number;
+            tlb[queue_position %= (sizeof(tlb) / sizeof(tlb[0])) - 1][0] = page_number;
             tlb[queue_position++][1] = i;
         }
 
