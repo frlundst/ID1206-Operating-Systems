@@ -18,10 +18,9 @@ int get_page_offset(int logical_address)
 
 int get_physical_address(int logical_address, int frame_number)
 {
-    int page_number = get_page_number(logical_address);
     int page_offset = get_page_offset(logical_address);
     
-    return page_offset | frame_number;
+    return frame_number * 256 + page_offset;
 }
 
 int main(int argc, char *argv[])
@@ -73,7 +72,6 @@ int main(int argc, char *argv[])
         printf("logical address %d  physical_address: %d value: %d \n",
                logical_address,
                get_physical_address(logical_address, frame),
-               //frame * 256 + page_offset,
                value
                );
     }
