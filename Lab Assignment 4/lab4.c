@@ -7,16 +7,12 @@ int giveRandom(int lower, int upper)
         return (rand() % (upper - lower + 1)) + lower;
 }
 
-int FCFS (int initial_position, int *disc){
+int FCFS (int initial_position, int *disc, int arrlength){
     int sum = 0;
     int temp = 0;
-    int arrlength = (sizeof(disc));
 
     for(int i = 0; i < arrlength; i++){
-        temp = initial_position - disc[i];
-        if(temp < 0) {
-            temp = temp*-1;
-        }
+        temp = abs(initial_position - disc[i]);
         sum += temp;
         initial_position = disc[i];
     }
@@ -24,29 +20,26 @@ int FCFS (int initial_position, int *disc){
     return sum;
 }
 
-int SSTF (int initial_position, int *disc){
+int SSTF (int initial_position, int *disc, int arrlength){
     int sum = 0;
-
     int temp = INTEGER_MAXVALUE;
-    int diff = 0;
-    int arrlength = (sizeof(disc));
+    int diff, j, i = 0;
+    int new_initial_position_index = 0;
 
-for(int i = 0; i < arrlength; i++){
-    for(int i = 0; i < arrlength; i++){
-        diff = abs(initial_position - disc[i]);
-        //printf("diff: %d\n", diff);
-        if(diff < temp && diff != 0){
-            temp = diff;
+
+    for(i = 0; i < arrlength; i++){
+        for(j = 0; j < arrlength; j++){
+            diff = abs(initial_position - disc[j]);
+            if(diff < temp && diff != 0){
+                temp = diff;
+                new_initial_position_index = j;
+            }
         }
+        initial_position = disc[new_initial_position_index];
+        disc[new_initial_position_index] = INTEGER_MAXVALUE;
+        sum += temp;
+        temp = INTEGER_MAXVALUE;
     }
-    initial_position = disc[i];
-    disc[i] = 0;
-    printf("temp: %d\n", temp);
-    sum += temp;
-    temp = INTEGER_MAXVALUE;
-    //HÄR ÄR DET NÅGOT KNASIGT TROR JAG
-
-}
     return sum;
 }
 
@@ -60,20 +53,21 @@ int main(){
     while(i < 5000){
         sequence[i] = i;
         i++;
-
     }
     i = 0;
     
-    while(i<1000){
+    while(i++<1000){
         random_series[i] = giveRandom(0,5000);
-        //printf("%d\n", random_series[i]);
-        i++;
     }
 
-    printf("FCFS: %d\n", FCFS(53,slide_numbers));
-    printf("SSTF: %d\n", SSTF(53,slide_numbers));
+    printf("FCFS: %d\n", FCFS(53,slide_numbers, sizeof(slide_numbers)/sizeof(slide_numbers[0])));
+    printf("SSTF: %d\n", SSTF(53,slide_numbers, sizeof(slide_numbers)/sizeof(slide_numbers[0])));
 
+    printf("STFF: %d\n", SSTF(2,random_series, sizeof(random_series)/sizeof(random_series[0])));
 
     return 0;
 
 }
+
+
+
