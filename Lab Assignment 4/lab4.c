@@ -110,6 +110,44 @@ int SCAN(int initial_position, int *disc, int arrlength)
     return sum;
 }
 
+int CSCAN(int initial_position, int *disc, int arrlength){
+    insertionSort(disc, arrlength);
+    int sum = 0;
+    int start_index=0;
+
+    for(int i = 0; i < arrlength; i++){
+        if(disc[i] > initial_position){
+            sum += abs(disc[i] - initial_position);
+            printf("sum: %d", sum);
+            start_index = i;
+            initial_position = disc[i];
+            printf("start_pos: %d\n", disc[start_index]);
+            disc[i] = INTEGER_MAXVALUE;
+            break;
+        }
+    }
+
+    for(int i = start_index; i < arrlength; i++){
+        if(disc[i] != INTEGER_MAXVALUE){
+            sum += abs(initial_position - disc[i]);
+            initial_position = disc[i];
+            printf("initial_position: %d, sum: %d\n", initial_position, sum);
+        }
+    }
+
+    initial_position = 0;
+
+    for(int i = 0; i < start_index; i++){
+        if(disc[i] != INTEGER_MAXVALUE){
+            sum += abs(initial_position - disc[i]);
+            initial_position = disc[i];
+            printf("initial_position: %d, sum: %d\n", initial_position, sum);
+        }
+    }
+
+    return sum;
+}
+
 int main()
 {
     int i = 0;
@@ -133,7 +171,8 @@ int main()
     // printf("SSTF: %d\n", SSTF(53,slide_numbers, sizeof(slide_numbers)/sizeof(slide_numbers[0])));
     // printf("SSTF: %d\n", SSTF(2,random_series, sizeof(random_series)/sizeof(random_series[0])));
 
-    printf("SCAN: %d\n", SCAN(53, slide_numbers, sizeof(slide_numbers) / sizeof(slide_numbers[0])));
+    //printf("SCAN: %d\n", SCAN(53, slide_numbers, sizeof(slide_numbers) / sizeof(slide_numbers[0])));
+    printf("CSCAN: %d\n", CSCAN(53, slide_numbers, sizeof(slide_numbers) / sizeof(slide_numbers[0])));
 
     return 0;
 }
