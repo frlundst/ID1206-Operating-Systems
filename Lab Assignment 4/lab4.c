@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define INTEGER_MAXVALUE 2147483647
+#define DISC_SIZE 4999
 
 /*
 * Insertion sort taken from GeeksForGeeks
@@ -112,16 +113,16 @@ int SCAN(int initial_position, int *disc, int arrlength)
 
 int CSCAN(int initial_position, int *disc, int arrlength){
     insertionSort(disc, arrlength);
+
     int sum = 0;
-    int start_index=0;
+    sum =  DISC_SIZE + abs(DISC_SIZE - disc[arrlength-1]);
+    int start_index = 0;
 
     for(int i = 0; i < arrlength; i++){
         if(disc[i] > initial_position){
             sum += abs(disc[i] - initial_position);
-            printf("sum: %d", sum);
             start_index = i;
             initial_position = disc[i];
-            printf("start_pos: %d\n", disc[start_index]);
             disc[i] = INTEGER_MAXVALUE;
             break;
         }
@@ -131,7 +132,6 @@ int CSCAN(int initial_position, int *disc, int arrlength){
         if(disc[i] != INTEGER_MAXVALUE){
             sum += abs(initial_position - disc[i]);
             initial_position = disc[i];
-            printf("initial_position: %d, sum: %d\n", initial_position, sum);
         }
     }
 
@@ -141,38 +141,120 @@ int CSCAN(int initial_position, int *disc, int arrlength){
         if(disc[i] != INTEGER_MAXVALUE){
             sum += abs(initial_position - disc[i]);
             initial_position = disc[i];
-            printf("initial_position: %d, sum: %d\n", initial_position, sum);
         }
     }
 
     return sum;
 }
 
-int main()
+int CLOOK (int initial_position, int *disc, int arrlength){
+    insertionSort(disc, arrlength);
+    int sum = 0;
+    int start_index=0;
+    //find start element and it's index
+    for(int i = 0; i < arrlength; i++){
+        if(disc[i] > initial_position){
+            sum += abs(disc[i] - initial_position);
+            start_index = i;
+            initial_position = disc[i];
+            disc[i] = INTEGER_MAXVALUE;
+            break;
+        }
+    }
+
+    for(int i = start_index; i < arrlength; i++){
+        if(disc[i] != INTEGER_MAXVALUE){
+            sum += abs(initial_position - disc[i]);
+            initial_position = disc[i];
+        }
+    }
+
+    sum += abs(initial_position - disc[0]);
+    initial_position = disc[0];
+
+    for(int i = 0; i < start_index; i++){
+        if(disc[i] != INTEGER_MAXVALUE){
+            sum += abs(initial_position - disc[i]);
+            initial_position = disc[i];
+        }
+    }
+
+    return sum;
+}
+int LOOK(int initial_position, int *disc, int arrlength){
+    insertionSort(disc, arrlength);
+    int sum = 0;
+    int max_lower_than_initial = INTEGER_MAXVALUE * -1, index = 0;
+    for (int i = 0; i < arrlength; i++)
+    {
+        if (disc[i] < initial_position && disc[i] > max_lower_than_initial)
+        {
+            max_lower_than_initial = disc[i];
+            index = i;
+        }
+    }
+
+    int flag = 1;
+    for (int i = index; i < arrlength && i >= 0;)
+    {
+        if (i == 0)
+        {
+            flag = 0;
+        }
+
+        if (disc[i] != INTEGER_MAXVALUE)
+        {
+            sum += abs(initial_position - disc[i]);
+            initial_position = disc[i];
+            disc[i] = INTEGER_MAXVALUE;
+        }
+
+        if (flag == 1)
+        {
+            i--;
+        }
+        else
+        {
+            i++;
+        }
+    }
+    return sum;
+}
+
+//function that makes a shallow copy of an array
+int* copyArray(int *source, int length){
+    int *destination = malloc(sizeof(int) * length);
+    for(int i = 0; i < length; i++){
+        destination[i] = source[i];
+    }
+    return destination;
+}
+
+int main(int argc, char *argv[])
 {
     int i = 0;
     int sequence[5000];
     int random_series[1000];
-    int slide_numbers[] = {98, 183, 37, 122, 14, 124, 65, 67};
-
-    while (i < 5000)
-    {
-        sequence[i] = i;
-        i++;
-    }
-    i = 0;
+    int startpos = atoi(argv[1]);
+    //int slide_numbers[] = {98, 183, 37, 122, 14, 124, 65, 67};
+    //int webiste_numbers[] = {98, 183, 41, 122, 14, 124, 65, 67};
+    //int geeks4geeks[] = {176, 79, 34, 60, 92, 11, 41, 114};
+    
 
     while (i++ < 1000)
     {
         random_series[i] = giveRandom(0, 5000);
     }
 
-    // printf("FCFS: %d\n", FCFS(53,slide_numbers, sizeof(slide_numbers)/sizeof(slide_numbers[0])));
-    // printf("SSTF: %d\n", SSTF(53,slide_numbers, sizeof(slide_numbers)/sizeof(slide_numbers[0])));
-    // printf("SSTF: %d\n", SSTF(2,random_series, sizeof(random_series)/sizeof(random_series[0])));
+    printf("FCFS: %d\n", FCFS(startpos, random_series, sizeof(random_series)/sizeof(random_series[0])));
+    printf("SSTF: %d\n", SSTF(startpos, copyArray(random_series, 1000), sizeof(random_series)/sizeof(random_series[0])));
+    printf("SCAN: %d\n", SCAN(startpos, copyArray(random_series, 1000), sizeof(random_series) / sizeof(random_series[0])));
+    printf("CSCAN: %d\n", CSCAN(startpos, copyArray(random_series, 1000), sizeof(random_series) / sizeof(random_series[0])));
+    printf("CLOOK: %d\n", CLOOK(startpos, copyArray(random_series, 1000), sizeof(random_series) / sizeof(random_series[0])));
+    printf("LOOK: %d\n", LOOK(startpos, copyArray(random_series, 1000), sizeof(random_series) / sizeof(random_series[0])));
 
-    //printf("SCAN: %d\n", SCAN(53, slide_numbers, sizeof(slide_numbers) / sizeof(slide_numbers[0])));
-    printf("CSCAN: %d\n", CSCAN(53, slide_numbers, sizeof(slide_numbers) / sizeof(slide_numbers[0])));
+
+
 
     return 0;
 }
